@@ -22,7 +22,12 @@ def _build_database_url() -> URL:
 
 
 DATABASE_URL = _build_database_url()
-engine: AsyncEngine = create_async_engine(DATABASE_URL, echo=False, future=True)
+engine: AsyncEngine = create_async_engine(
+    DATABASE_URL,
+    echo=False,
+    future=True,
+    pool_pre_ping=True,
+)
 AsyncSessionLocal = async_sessionmaker(engine, expire_on_commit=False, class_=AsyncSession)
 
 

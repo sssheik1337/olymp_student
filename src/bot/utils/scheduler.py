@@ -22,26 +22,32 @@ async def _process_due_reminders() -> None:
     """Асинхронно обработать просроченные напоминания."""
 
     now = datetime.now(timezone.utc)
-    async with AsyncSessionLocal() as session:
-        async with session.begin():
-            result = await session.execute(
-                select(Reminder).where(
-                    Reminder.sent_at.is_(None),
-                    Reminder.scheduled_at <= now,
-                )
-            )
-            reminders = result.scalars().all()
-            if not reminders:
-                return
 
-            for reminder in reminders:
-                logger.info(
-                    "Отправляем напоминание %s для пользователя %s по олимпиаде %s",
-                    reminder.kind.value,
-                    reminder.user_id,
-                    reminder.olympiad_id,
+    try:
+        async with AsyncSessionLocal() as session:
+            async with session.begin():
+                result = await session.execute(
+                    select(Reminder).where(
+                        Reminder.sent_at.is_(None),
+                        Reminder.scheduled_at <= now,
+                    )
                 )
-                reminder.sent_at = now
+                reminders = result.scalars().all()
+                if not reminders:
+                    return
+
+                for reminder in reminders:
+                    logger.info(
+                        "Отправляем напоминание %s для пользователя %s по олимпиаде %s",
+                        reminder.kind.value,
+                        reminder.user_id,
+                        reminder.olympiad_id,
+                    )
+                    reminder.sent_at = now
+    except asyncio.CancelledError:
+        raise
+    except Exception:  # noqa: BLE001 - логируем и продолжим попытки позже
+        logger.exception("Не удалось обработать напоминания, повторим попытку позже")
 
 
 def start_scheduler() -> AsyncIOScheduler:
