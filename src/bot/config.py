@@ -42,7 +42,9 @@ class Settings(BaseSettings):
         if isinstance(value, str):
             items = [item.strip() for item in value.split(",")]
             return [int(item) for item in items if item]
-        if isinstance(value, list):
+        if isinstance(value, int):
+            return [value]
+        if isinstance(value, (list, tuple, set)):
             return [int(item) for item in value]
         raise TypeError("admin_ids must be provided as a comma-separated string or list of integers")
 
