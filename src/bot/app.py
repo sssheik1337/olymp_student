@@ -7,6 +7,7 @@ import sys
 from pathlib import Path
 
 from aiogram import Bot, Dispatcher
+from aiogram.client.default import DefaultBotProperties
 from aiogram.types import BotCommand
 
 CURRENT_DIR = Path(__file__).resolve().parent
@@ -47,7 +48,10 @@ async def main() -> None:
     config = get_config()
     logger.info("Запуск бота олимпиад")
 
-    bot = Bot(token=config.bot_token, parse_mode="HTML")
+    bot = Bot(
+        token=config.bot_token,
+        default=DefaultBotProperties(parse_mode="HTML"),
+    )
     dp = Dispatcher()
 
     subscription_gate = SubscriptionGateMiddleware()
