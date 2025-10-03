@@ -6,9 +6,9 @@ from aiogram import F, Router
 from aiogram.filters import Command
 from aiogram.types import CallbackQuery, Message
 
-from ...keyboards.calendar import build_calendar_keyboard
-from ...services.calendar_service_stub import get_calendar_service
-from ...utils import texts
+from bot.keyboards.calendar import build_calendar_keyboard
+from bot.services.calendar_service_stub import get_calendar_service
+from bot.utils import texts
 
 router = Router(name="user_calendar_sync_stub")
 

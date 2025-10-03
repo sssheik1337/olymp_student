@@ -6,8 +6,8 @@ from aiogram import Router
 from aiogram.filters import CommandStart
 from aiogram.types import Message
 
-from ...keyboards.main_menu import build_main_menu_keyboard
-from ...utils import texts
+from bot.keyboards.main_menu import build_main_menu_keyboard
+from bot.utils import texts
 
 router = Router(name="common_start")
 

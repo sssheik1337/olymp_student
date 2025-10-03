@@ -9,15 +9,15 @@ from aiogram.exceptions import TelegramBadRequest
 from aiogram.filters import Command
 from aiogram.types import CallbackQuery, Message
 
-from ...keyboards.subscription import (
+from bot.keyboards.subscription import (
     BACK_TO_SUBSCRIPTION_CALLBACK,
     CONFIRM_CALLBACK,
     PAY_CALLBACK,
     build_subscription_overview_keyboard,
     build_subscription_payment_keyboard,
 )
-from ...services.subscription_service import get_subscription_service
-from ...utils import texts
+from bot.services.subscription_service import get_subscription_service
+from bot.utils import texts
 
 router = Router(name="user_subscription_stub")
 

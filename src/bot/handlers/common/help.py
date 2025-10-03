@@ -6,7 +6,7 @@ from aiogram import Router
 from aiogram.filters import Command
 from aiogram.types import Message
 
-from ...utils import texts
+from bot.utils import texts
 
 router = Router(name="common_help")
 

@@ -11,9 +11,9 @@ from aiogram.types import CallbackQuery, Message
 
 from typing import Sequence
 
-from ...config import get_config
-from ...keyboards.admin_menu import ADMIN_BACK_CALLBACK, ADMIN_MATERIALS_CALLBACK
-from ...services.materials_service import (
+from bot.config import get_config
+from bot.keyboards.admin_menu import ADMIN_BACK_CALLBACK, ADMIN_MATERIALS_CALLBACK
+from bot.services.materials_service import (
     AdminMaterial,
     MaterialsService,
     get_materials_service,

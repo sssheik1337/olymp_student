@@ -6,13 +6,13 @@ from aiogram import F, Router
 from aiogram.filters import Command
 from aiogram.types import CallbackQuery, Message
 
-from ...keyboards.catalog import (
+from bot.keyboards.catalog import (
     BACK_TO_SUBJECTS_CALLBACK,
     build_olympiads_keyboard,
     build_subjects_keyboard,
 )
-from ...services.olympiad_service import get_olympiad_service
-from ...utils import texts
+from bot.services.olympiad_service import get_olympiad_service
+from bot.utils import texts
 
 
 router = Router(name="user_catalog")
