@@ -10,16 +10,16 @@ authors = [
     {name = "Olympiad Bot Team"}
 ]
 readme = "README.md"
-requires-python = ">=3.12,<3.13"
+requires-python = ">=3.12"
 dependencies = [
     "aiogram>=3.20",
-    "pydantic-settings",
-    "sqlalchemy[asyncio]",
-    "asyncpg",
-    "alembic",
-    "apscheduler",
-    "python-dotenv",
-    "loguru"
+    "pydantic-settings>=2",
+    "SQLAlchemy>=2",
+    "asyncpg>=0.29",
+    "alembic>=1.13",
+    "apscheduler>=3.10",
+    "python-dotenv>=1",
+    "loguru>=0.7",
 ]
 
 [tool.setuptools]
