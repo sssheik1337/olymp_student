@@ -3,9 +3,16 @@
 from __future__ import annotations
 
 import asyncio
+import sys
+from pathlib import Path
 
 from aiogram import Bot, Dispatcher
 from aiogram.types import BotCommand
+
+CURRENT_DIR = Path(__file__).resolve().parent
+SRC_DIR = CURRENT_DIR.parent
+if str(SRC_DIR) not in sys.path:
+    sys.path.insert(0, str(SRC_DIR))
 
 from bot.config import get_config
 from bot.handlers.admin import materials as admin_materials_router
