@@ -9,18 +9,18 @@ from aiogram.exceptions import TelegramBadRequest
 from aiogram.filters import Command
 from aiogram.types import CallbackQuery, Message
 
-from ...keyboards.universities import (
+from bot.keyboards.universities import (
     BACK_TO_LIST_CALLBACK,
     UNIVERSITY_CALLBACK_PREFIX,
     build_universities_keyboard,
     build_university_details_keyboard,
 )
-from ...services.universities_service import (
+from bot.services.universities_service import (
     UniversityDetail,
     UniversityRecommendation,
     get_universities_service,
 )
-from ...utils import texts
+from bot.utils import texts
 
 router = Router(name="user_universities")
 

@@ -1,16 +1,23 @@
 """Application configuration management."""
 
 from functools import lru_cache
+from pathlib import Path
 from typing import Any
 
 from pydantic import field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
+BASE_DIR = Path(__file__).resolve().parents[2]
+
 
 class Settings(BaseSettings):
     """Settings loaded from environment variables."""
 
-    model_config = SettingsConfigDict(env_file=".env", env_file_encoding="utf-8", extra="ignore")
+    model_config = SettingsConfigDict(
+        env_file=(BASE_DIR / ".env", BASE_DIR / ".env.example"),
+        env_file_encoding="utf-8",
+        extra="ignore",
+    )
 
     bot_token: str
     admin_ids: list[int]
@@ -35,7 +42,9 @@ class Settings(BaseSettings):
         if isinstance(value, str):
             items = [item.strip() for item in value.split(",")]
             return [int(item) for item in items if item]
-        if isinstance(value, list):
+        if isinstance(value, int):
+            return [value]
+        if isinstance(value, (list, tuple, set)):
             return [int(item) for item in value]
         raise TypeError("admin_ids must be provided as a comma-separated string or list of integers")
 

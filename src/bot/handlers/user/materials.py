@@ -5,9 +5,9 @@ from __future__ import annotations
 from aiogram import F, Router
 from aiogram.types import CallbackQuery, Message
 
-from ...keyboards.favorites import MATERIALS_CALLBACK_PREFIX
-from ...services.materials_service import get_materials_service
-from ...services.olympiad_service import get_olympiad_service
+from bot.keyboards.favorites import MATERIALS_CALLBACK_PREFIX
+from bot.services.materials_service import get_materials_service
+from bot.services.olympiad_service import get_olympiad_service
 
 router = Router(name="user_materials")
 

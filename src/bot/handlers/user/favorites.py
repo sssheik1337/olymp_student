@@ -9,12 +9,12 @@ from aiogram.exceptions import TelegramBadRequest
 from aiogram.filters import Command
 from aiogram.types import CallbackQuery, Message
 
-from ...keyboards.favorites import (
+from bot.keyboards.favorites import (
     REMOVE_CALLBACK_PREFIX,
     build_favorites_keyboard,
 )
-from ...services.favorites_service import FavoriteOlympiad, get_favorites_service
-from ...utils import texts
+from bot.services.favorites_service import FavoriteOlympiad, get_favorites_service
+from bot.utils import texts
 
 router = Router(name="user_favorites")
 

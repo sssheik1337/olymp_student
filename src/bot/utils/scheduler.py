@@ -5,7 +5,7 @@ from __future__ import annotations
 import asyncio
 from datetime import datetime, timezone
 
-from apscheduler.schedulers.background import BackgroundScheduler
+from apscheduler.schedulers.asyncio import AsyncIOScheduler
 from apscheduler.triggers.interval import IntervalTrigger
 from bot.utils.logging import logger
 from sqlalchemy import select
@@ -15,42 +15,42 @@ from bot.repository.models import Reminder
 
 
 _REMINDER_JOB_ID = "reminders:dispatch"
-_SCHEDULER: BackgroundScheduler | None = None
+_SCHEDULER: AsyncIOScheduler | None = None
 
 
 async def _process_due_reminders() -> None:
     """Асинхронно обработать просроченные напоминания."""
 
     now = datetime.now(timezone.utc)
-    async with AsyncSessionLocal() as session:
-        async with session.begin():
-            result = await session.execute(
-                select(Reminder).where(
-                    Reminder.sent_at.is_(None),
-                    Reminder.scheduled_at <= now,
+
+    try:
+        async with AsyncSessionLocal() as session:
+            async with session.begin():
+                result = await session.execute(
+                    select(Reminder).where(
+                        Reminder.sent_at.is_(None),
+                        Reminder.scheduled_at <= now,
+                    )
                 )
-            )
-            reminders = result.scalars().all()
-            if not reminders:
-                return
+                reminders = result.scalars().all()
+                if not reminders:
+                    return
 
-            for reminder in reminders:
-                logger.info(
-                    "Отправляем напоминание %s для пользователя %s по олимпиаде %s",
-                    reminder.kind.value,
-                    reminder.user_id,
-                    reminder.olympiad_id,
-                )
-                reminder.sent_at = now
-
-
-def _sync_process_due_reminders() -> None:
-    """Обёртка для запуска асинхронной задачи внутри APScheduler."""
-
-    asyncio.run(_process_due_reminders())
+                for reminder in reminders:
+                    logger.info(
+                        "Отправляем напоминание %s для пользователя %s по олимпиаде %s",
+                        reminder.kind.value,
+                        reminder.user_id,
+                        reminder.olympiad_id,
+                    )
+                    reminder.sent_at = now
+    except asyncio.CancelledError:
+        raise
+    except Exception:  # noqa: BLE001 - логируем и продолжим попытки позже
+        logger.exception("Не удалось обработать напоминания, повторим попытку позже")
 
 
-def start_scheduler() -> BackgroundScheduler:
+def start_scheduler() -> AsyncIOScheduler:
     """Создать и запустить планировщик напоминаний."""
 
     global _SCHEDULER
@@ -58,9 +58,11 @@ def start_scheduler() -> BackgroundScheduler:
     if _SCHEDULER and _SCHEDULER.running:
         return _SCHEDULER
 
-    scheduler = BackgroundScheduler(timezone=timezone.utc)
+    loop = asyncio.get_running_loop()
+
+    scheduler = AsyncIOScheduler(timezone=timezone.utc, event_loop=loop)
     scheduler.add_job(
-        _sync_process_due_reminders,
+        _process_due_reminders,
         trigger=IntervalTrigger(minutes=1),
         id=_REMINDER_JOB_ID,
         max_instances=1,

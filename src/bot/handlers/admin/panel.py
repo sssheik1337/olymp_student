@@ -6,8 +6,8 @@ from aiogram import F, Router
 from aiogram.filters import Command
 from aiogram.types import CallbackQuery, Message
 
-from ...config import get_config
-from ...keyboards.admin_menu import (
+from bot.config import get_config
+from bot.keyboards.admin_menu import (
     ADMIN_BACK_CALLBACK,
     ADMIN_OLYMPIADS_CALLBACK,
     ADMIN_REMINDERS_CALLBACK,
