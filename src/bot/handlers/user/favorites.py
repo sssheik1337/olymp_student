@@ -10,7 +10,6 @@ from aiogram.filters import Command
 from aiogram.types import CallbackQuery, Message
 
 from ...keyboards.favorites import (
-    MATERIALS_CALLBACK_PREFIX,
     REMOVE_CALLBACK_PREFIX,
     build_favorites_keyboard,
 )
